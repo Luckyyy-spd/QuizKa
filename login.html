@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz-KA</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Quiz Styles */
+        .quiz-section {
+            display: none;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 50px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .student-info {
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: left;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .student-info h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .student-info p {
+            margin: 0.5rem 0;
+        }
+
+        .results-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: left;
+            display: none;
+        }
+
+        .question-result {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .correct { color: #27ae60; }
+        .wrong { color: #e74c3c; }
+
+        .final-score {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form" id="loginSection">
+        <div class="logo">Quiz-KA</div>
+        <h2>Student Information</h2>
+
+        <form id="studentForm">   
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+            
+            <label for="middleName">Middle Name</label>
+            <input type="text" id="middleName" name="middleName" required placeholder="Enter your middle name">
+            
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required placeholder="Enter your age">
+            
+            <label for="birthdate">Birthdate</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+            
+            <button type="submit">Start Quiz</button>
+        </form>
+
+        <div class="container">
+            <div class="student-info">
+                <h2>Student Information</h2>
+                <p><strong>Last Name:</strong> <span id="showLastName"></span></p>
+                <p><strong>First Name:</strong> <span id="showFirstName"></span></p>
+                <p><strong>Middle Name:</strong> <span id="showMiddleName"></span></p>
+                <p><strong>Age:</strong> <span id="showAge"></span></p>
+                <p><strong>Birthday:</strong> <span id="showBirthdate"></span></p>
+            </div>
+            <h1>HTML Quiz</h1>
+            <div id="resultsContainer" class="results-container"></div>
+            <button class="start-btn" id="startButton">Start Quiz</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- <div class="quiz-section" id="quizSection"> -->
+       
+
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let studentData = [
+                document.getElementById('lastName').value,
+                document.getElementById('firstName').value,
+                document.getElementById('middleName').value,
+                document.getElementById('age').value,
+                document.getElementById('birthdate').value
+            ];
+
+            document.getElementById('showLastName').textContent = studentData[0];
+            document.getElementById('showFirstName').textContent = studentData[1];
+            document.getElementById('showMiddleName').textContent = studentData[2];
+            document.getElementById('showAge').textContent = studentData[3];
+            document.getElementById('showBirthdate').textContent = studentData[4];
+
+            // document.getElementById('loginSection').style.display = 'none';
+            // document.getElementById('quizSection').style.display = 'block';
+        });
+
+
+        let studentData = [];
+        let questions = [
+            "What is the purpose of the title tag in HTML",
+            "Which HTML tag is used to create a hyperlink",
+            "What is the purpose of the p tag in HTML",
+            "Which HTML tag is used to create a heading",
+            "What is the purpose of the img tag in HTML",
+            "What is the purpose of the color property in CSS",
+            "Which CSS property is used to set the font size?",
+            "What is the purpose of the background-color property in CSS",
+            "Which CSS property is used to set the alignment of text",
+            "What is the purpose of the padding property in CSS"
+        ];
+
+        let choices = [
+            ["To define the document's heading", "To define the document's title", "To define the document's paragraph", "To define the document's image"],
+            ["<p>", "link", "img", "button"],
+            ["To create a table", "To create a paragraph", "To create link", "To create an image"],
+            ["<p>", "<h1>", "<img>", "<a>"],
+            ["To create a table", "To create a paragraph", "To create a link", "To add an image"],
+            ["To set text color", "To set the border color", "To set background color", "To set the font size"],
+            ["font-family", "color", "background-color", "font-size"],
+            ["To set the text color", "To set the background-color", "To set the border color", "To set the font size"],
+            ["text-align", "font-size", "color", "background-color"],
+            ["To set the margin", "To set the border", "To set the padding", "To set the width"]
+        ];
+
+        let correctAnswers = ["b", "b", "b", "b", "d", "a", "d", "b", "a", "c"];
+
+
+        
+
+
+
+
+
+
+        document.getElementById('startButton').onclick = function() {
+            if(confirm("Are you ready to start the quiz?")) {
+                let score = 0;
+                let userAnswers = [];
+                let resultsHTML = '<h2>Quiz Results</h2>';
+
+                for(let i = 0; i < questions.length; i++) {
+                    let userAnswer;
+                    do {
+                        userAnswer = prompt(
+                            questions[i] + "\n\n" +
+                            "a: " + choices[i][0] + "\n" +
+                            "b: " + choices[i][1] + "\n" +
+                            "c: " + choices[i][2] + "\n" +
+                            "d: " + choices[i][3] + "\n\n" +
+                            "Enter your answer (a, b, c, d):"
+                        );
+                    } while (!userAnswer || !["a", "b", "c", "d"].includes(userAnswer.toLowerCase()));
+                    
+                    userAnswers.push(userAnswer.toLowerCase());
+                }
+                
+                for(let i = 0; i < questions.length; i++) {
+                    const isCorrect = userAnswers[i] === correctAnswers[i];
+                    if (isCorrect) score++;
+
+                    resultsHTML += `
+                        <div class="question-result">
+                            <h3>Question ${i + 1}: ${questions[i]}</h3>
+                            <div class="answer-info">
+                                <strong>Your answer:</strong> ${choices[i][{"a": 0, "b": 1, "c": 2, "d": 3}[userAnswers[i]]]}
+                            </div>
+                            <div class="answer-info">
+                                <strong>Correct answer:</strong> ${choices[i][{"a": 0, "b": 1, "c": 2, "d": 3}[correctAnswers[i]]]}
+                            </div>
+                            <div class="answer-info ${isCorrect ? 'correct' : 'wrong'}">
+                                <strong>Status:</strong> ${isCorrect ? 'Correct!' : 'Wrong!'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                resultsHTML += `
+                    <div class="final-score">
+                        Final Score: ${score} out of ${questions.length}
+                    </div>
+                `;
+
+                const resultsContainer = document.getElementById('resultsContainer');
+                resultsContainer.innerHTML = resultsHTML;
+                resultsContainer.style.display = 'block';
+                document.getElementById('startButton').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html> 

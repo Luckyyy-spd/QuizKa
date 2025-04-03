@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz Application</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 50px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .student-info {
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: left;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .student-info h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .student-info p {
+            margin: 0.5rem 0;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+        }
+
+        .start-btn {
+            background-color: #7FFFD4;
+            color: #2c3e50;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .start-btn:hover {
+            background-color: #45E5A0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            background-color: #fdf0ed;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .results-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: left;
+            display: none;
+        }
+
+        .results-container h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .question-result {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-result h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .answer-info {
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+
+        .correct {
+            color: #27ae60;
+        }
+
+        .wrong {
+            color: #e74c3c;
+        }
+
+        .final-score {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="student-info">
+            <h2>Student Information</h2>
+            <p><strong>Last Name:</strong> <span id="lastName">Loading...</span></p>
+            <p><strong>First Name:</strong> <span id="firstName">Loading...</span></p>
+            <p><strong>Middle Name:</strong> <span id="middleName">Loading...</span></p>
+            <p><strong>Age:</strong> <span id="age">Loading...</span></p>
+            <p><strong>Birthday:</strong> <span id="birthdate">Loading...</span></p>
+            <!-- <p><strong>Year Level:</strong> <span id="yearLevel">Loading...</span></p>
+            <p><strong>Section:</strong> <span id="section">Loading...</span></p> -->
+        </div>
+        <h1>HTML Quiz</h1>
+        <div id="resultsContainer" class="results-container"></div>
+        <button class="start-btn" id="startButton">Start Quiz</button>
+    </div>
+
+    <script>
+        const studentData = JSON.parse(localStorage.getItem('studentData') || '[]');
+        const studentFields = ["lastName", "firstName", "middleName", "age", "birthdate"];
+
+        if (studentData.length < 5) {
+            document.querySelector('.container').innerHTML = `
+                <div class="error-message">
+                    <h2>Error: Incomplete Student Information</h2>
+                    <p>Please fill in all required information to access the quiz.</p>
+                </div>
+                <a href="login.html" class="start-btn">Go to Login</a>
+            `;
+        } else {
+            for(let i = 0; i < studentFields.length; i++) {
+                document.getElementById(studentFields[i]).textContent = studentData[i];
+            }
+            // Clear the data after using it (optional)
+            localStorage.removeItem('studentData');
+        }
+
+        let questions = [
+            "What is the purpose of the title tag in HTML",
+            "Which HTML tag is used to create a hyperlink",
+            "What is the purpose of the p tag in HTML",
+            "Which HTML tag is used to create a heading",
+            "What is the purpose of the img tag in HTML",
+            "What is the purpose of the color property in CSS",
+            "Which CSS property is used to set the font size?",
+            "What is the purpose of the background-color property in CSS",
+            "Which CSS property is used to set the alignment of text",
+            "What is the purpose of the padding property in CSS"
+        ];
+
+        let choices = [
+            ["To define the document's heading", "To define the document's title", "To define the document's paragraph", "To define the document's image"],
+            ["<p>", "link", "img", "button"],
+            ["To create a table", "To create a paragraph", "To create link", "To create an image"],
+            ["<p>", "<h1>", "<img>", "<a>"],
+            ["To create a table", "To create a paragraph", "To create a link", "To add an image"],
+            ["To set text color", "To set the border color", "To set background color", "To set the font size"],
+            ["font-family", "color", "background-color", "font-size"],
+            ["To set the text color", "To set the background-color", "To set the border color", "To set the font size"],
+            ["text-align", "font-size", "color", "background-color"],
+            ["To set the margin", "To set the border", "To set the padding", "To set the width"]
+        ];
+
+        let correctAnswers = [
+            "b",
+            "b",
+            "b",
+            "b",
+            "d",
+            "a",
+            "d",
+            "b",
+            "a",
+            "c"
+        ];
+
+        document.getElementById('startButton').onclick = function() {
+            if(confirm("Are you ready to start the quiz?")) {
+                let score = 0;
+                let userAnswers = [];
+                let resultsHTML = '<h2>Quiz Results</h2>';
+
+                for(let i = 0; i < questions.length; i++) {
+                    let userAnswer;
+                    do {
+                        userAnswer = prompt(
+                            questions[i] + "\n\n" +
+                            "a: " + choices[i][0] + "\n" +
+                            "b: " + choices[i][1] + "\n" +
+                            "c: " + choices[i][2] + "\n" +
+                            "d: " + choices[i][3] + "\n\n" +
+                            "Enter your answer (a, b, c, d):"
+                        );
+                    } while (!userAnswer || !["a", "b", "c", "d"].includes(userAnswer.toLowerCase()));
+                    
+                    userAnswers.push(userAnswer.toLowerCase());
+                }
+                
+                for(let i = 0; i < questions.length; i++) {
+                    const isCorrect = userAnswers[i] === correctAnswers[i];
+                    if (isCorrect) score++;
+
+                    resultsHTML += `
+                        <div class="question-result">
+                            <h3>Question ${i + 1}: ${questions[i]}</h3>
+                            <div class="answer-info">
+                                <strong>Your answer:</strong> ${choices[i][{"a": 0, "b": 1, "c": 2, "d": 3}[userAnswers[i]]]}
+                            </div>
+                            <div class="answer-info">
+                                <strong>Correct answer:</strong> ${choices[i][{"a": 0, "b": 1, "c": 2, "d": 3}[correctAnswers[i]]]}
+                            </div>
+                            <div class="answer-info ${isCorrect ? 'correct' : 'wrong'}">
+                                <strong>Status:</strong> ${isCorrect ? 'Correct!' : 'Wrong!'}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                resultsHTML += `
+                    <div class="final-score">
+                        Final Score: ${score} out of ${questions.length}
+                    </div>
+                `;
+
+                const resultsContainer = document.getElementById('resultsContainer');
+                resultsContainer.innerHTML = resultsHTML;
+                resultsContainer.style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>

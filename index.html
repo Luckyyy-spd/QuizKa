@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .student-info {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
 
+        .student-info h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .student-info p {
+            margin: 0.5rem 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Quiz-KA</div>
+        <p class="subtitle">Ang quiz ng mga matatalino!</p>
+        
+        <div id="studentInfo" class="student-info">
+            <h3>Student Information</h3>
+            <p><strong>Name:</strong> <span id="fullName">-</span></p>
+            <p><strong>Age:</strong> <span id="age">-</span></p>
+            <p><strong>Birthday:</strong> <span id="birthdate">-</span></p>
+        </div>
+
+        <a href="login.html" class="start-button">Take Quiz</a>
+
+        <div class="quiz-info">
+            <h3>Quiz Information</h3>
+            <ul>
+                <li>10 Multiple Choice Questions</li>
+                <li>Time Limit: No time limit</li>
+                <li>Results shown after completion</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let studentData = [];
+
+        function displayStudentInfo() {
+            if (studentData.length > 0) {
+                const latest = studentData[0];
+                document.getElementById('fullName').textContent = 
+                    `${latest.lastName}, ${latest.firstName} ${latest.middleName}`;
+                document.getElementById('age').textContent = latest.age;
+                document.getElementById('birthdate').textContent = 
+                    new Date(latest.birthdate).toLocaleDateString();
+                document.getElementById('studentInfo').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
