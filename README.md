@@ -13,30 +13,35 @@ Quiz-KA is a simple web-based quiz application designed to test users' knowledge
 ### Editing Questions
 To modify the questions in the quiz, locate the `questions` array in the `login.html` file. This array contains the questions that will be presented to the user.
 
-- javascript
-- let questions = [
-- "What is the purpose of the title tag in HTML?",
-- "Which HTML tag is used to create a hyperlink?",
-- // Add or modify questions here
-- ];
+```bash
+javascript
+let questions = [
+"What is the purpose of the title tag in HTML?",
+"Which HTML tag is used to create a hyperlink?",
+// Add or modify questions here
+];
+```
 
 ### Editing Choices
 Each question has a corresponding set of answer choices stored in the `choices` array. Each sub-array corresponds to a question in the `questions` array.
 
-- javascript
-- let choices = [
-- ["To define the document's heading", "To define the document's title", "To define the document's paragraph", "To define the document's image"],
-- ["<p>", "link", "img", "button"],
-- // Add or modify choices here
-- ];
+```bash
+javascript
+let choices = [
+["To define the document's heading", "To define the document's title", "To define the document's paragraph", "To define the document's image"],
+["<p>", "link", "img", "button"],
+// Add or modify choices here
+];
+```
 
 
 ### Editing Correct Answers
 The correct answers for each question are stored in the `correctAnswers` array. Each answer corresponds to the index of the correct choice in the `choices` array.
 
-- javascript
-- let correctAnswers = ["b", "b", "b", "b", "d", "a", "d", "b", "a", "c"];
-
+```bash
+javascript
+let correctAnswers = ["b", "b", "b", "b", "d", "a", "d", "b", "a", "c"];
+```
 
 ### Example of Editing a Question
 If you want to change the first question and its choices, you would do the following:
@@ -47,18 +52,20 @@ If you want to change the first question and its choices, you would do the follo
 
 For example, to change the first question to "What does HTML stand for?", you would modify the arrays like this:
 
-- javascript
-- let questions = [
-- "What does HTML stand for?",
-- // other questions...
-- ];
-- let choices = [
-- ["Hyper Text Markup Language", "High Text Markup Language", "Hyper Tabular Markup Language", "None of these"],
-- // other choices...
-- ];
-- let correctAnswers = ["a", // updated answer for the first question
-- // other correct answers...
-- ];
+```bash
+javascript
+let questions = [
+"What does HTML stand for?",
+// other questions...
+];
+let choices = [
+["Hyper Text Markup Language", "High Text Markup Language", "Hyper Tabular Markup Language", "None of these"],
+// other choices...
+];
+let correctAnswers = ["a", // updated answer for the first question
+// other correct answers...
+];
+```
 
 ## Running the Application
 1. Open `login.html` in a web browser.
